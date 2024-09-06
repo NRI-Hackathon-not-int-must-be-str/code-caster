@@ -1,0 +1,13 @@
+steps:
+  - name: "gcr.io/cloud-builders/docker"
+    args:
+      [
+        "build",
+        "-t",
+        "asia-northeast1-docker.pkg.dev/code-caster/code-caster/code-caster-backend:$COMMIT_SHA",
+        "./backend",
+      ]
+images:
+  - "asia-northeast1-docker.pkg.dev/code-caster/code-caster/code-caster-backend:$COMMIT_SHA"
+options:
+  logging: "CLOUD_LOGGING_ONLY"
