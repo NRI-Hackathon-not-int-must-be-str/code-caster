@@ -1,0 +1,32 @@
+steps:
+  - name: "gcr.io/cloud-builders/docker"
+    args:
+      [
+        "build",
+        "-t",
+        "asia-northeast1-docker.pkg.dev/code-caster/code-caster/code-caster-backend:$COMMIT_SHA",
+        "./backend",
+      ]
+  - name: "gcr.io/cloud-builders/docker"
+    args:
+      [
+        "push",
+        "asia-northeast1-docker.pkg.dev/code-caster/code-caster/code-caster-backend:$COMMIT_SHA",
+      ]
+  # Deploy container image to Cloud Run
+  - name: "gcr.io/google.com/cloudsdktool/cloud-sdk"
+    entrypoint: gcloud
+    args:
+      - "run"
+      - "services"
+      - "update"
+      - "code-caster-backend"
+      - "--image"
+      - "asia-northeast1-docker.pkg.dev/code-caster/code-caster/code-caster-backend:$COMMIT_SHA"
+      - "--region"
+      - "asia-northeast1"
+
+images:
+  - "asia-northeast1-docker.pkg.dev/code-caster/code-caster/code-caster-backend:$COMMIT_SHA"
+options:
+  logging: "CLOUD_LOGGING_ONLY"
