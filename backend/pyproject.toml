@@ -1,0 +1,22 @@
+[tool.poetry]
+name = "code-caster"
+version = "0.1.0"
+description = ""
+authors = ["nihiyama <1klyot8qo@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+pydantic = "^2.9.0"
+fastapi = "^0.113.0"
+uvicorn = {extras = ["standard"], version = "^0.30.6"}
+gunicorn = "^23.0.0"
+pydantic-settings = "^2.4.0"
+
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.3.2"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
