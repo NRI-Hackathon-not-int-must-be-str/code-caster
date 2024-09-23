@@ -1,61 +1,77 @@
 # CodeCaster
 
-## CodeCaster Backend Summary
+## System Overview
 
-This code defines a Python backend service using FastAPI for generating README files from code using Google's Gemini Pro model. It utilizes Docker for containerization and has configurations for VS Code development.
+CodeCaster is a service that automatically generates README files from code using Google's Gemini Pro model. It provides a user-friendly way to create informative and well-structured READMEs, saving developers time and effort. 
 
-**Key Components:**
+## Main Features
 
-1.  **Dev Container Configuration (`devcontainer.json`)**:
-    *   Sets up a development container with Python 3.12.
-    *   Uses a pre-built Docker image from Microsoft.
-    *   Installs VS Code extensions for Python development (Python, Ruff, MyPy).
-    *   Configures VS Code settings for Python formatting, linting, and type checking.
+* **README Generation:**  Upload a zip file containing your code, and CodeCaster will analyze it and generate a comprehensive README file.
+* **Gemini Pro Integration:** Leverages the power of Gemini Pro, a large language model, for accurate and context-aware README generation.
+* **Dockerized Backend:** The backend service is containerized using Docker, ensuring portability and ease of deployment.
+* **FastAPI Framework:** Uses FastAPI, a modern, fast (high-performance), web framework for building APIs with Python 3.7+ based on standard Python type hints.
+* **API Key Authentication:** Securely access the API endpoints using API key authentication.
 
-2.  **GitHub Action Workflow (`.github/workflows/main.yml`)**:
-    *   Triggers on every push to the repository.
-    *   Runs on Ubuntu.
-    *   Checks out the code.
-    *   Uses a custom GitHub Action (presumably for deploying to Cloud Run).
-    *   Builds and pushes a Docker image to Google Artifact Registry.
-    *   Deploys the image to Cloud Run.
+## Architecture Explanation
 
-3.  **`.gitignore`**:
-    *   Defines files and directories to be excluded from version control (common Python project files).
+The system consists of a backend service responsible for processing user requests and generating READMEs.
 
-4.  **`compose.yaml`**:
-    *   Not provided in the code snippet. Likely defines Docker Compose services for the application.
+**Technologies Used:**
 
-5.  **`poetry.lock`**:
-    *   Contains locked versions of Python dependencies managed by Poetry.
+* **Backend:**
+    * Python 3.12
+    * FastAPI
+    * Vertex AI
+    * Gemini Pro
+    * Gunicorn
+    * Docker
 
-6.  **`Dockerfile` (backend)**:
-    *   Defines the steps to build the Docker image for the backend service.
-    *   Uses a multi-stage build process (builder and runner).
-    *   Installs Poetry and project dependencies.
-    *   Configures a Gunicorn user.
-    *   Copies the application code.
-    *   Sets the working directory and exposes port 8000.
-    *   Defines the default command to start the Gunicorn server.
+* **Dev Environment:**
+    * VS Code Development Container
+    * Python Extension
+    * Ruff (Linting)
+    * MyPy (Type Checking)
 
-7.  **Gunicorn Configuration (`gunicorn_conf.py`)**:
-    *   Defines Gunicorn server settings (workers, timeouts, logging, etc.).
-    *   Uses environment variables for configuration with a nested delimiter (`__`).
+* **Deployment:**
+    * GitHub Actions
+    * Google Artifact Registry
+    * Google Cloud Run
 
-8.  **Backend Server (app)**:
-    *   Uses FastAPI framework.
-    *   Requires API key authentication for all endpoints.
-    *   Defines an endpoint (`/gen/readme/`) for generating README files:
-        *   Accepts a zip file containing code as input.
-        *   Extracts the zip file.
-        *   Uses Vertex AI and Gemini Pro to generate a README based on the code.
-        *   Saves the generated README to a file.
-    *   Defines an endpoint (`/gen/readme/{token}`) to retrieve the generated README file.
+## Build Instructions
 
-**Schemas:**
+**Prerequisites:**
 
-*   `CreateGenReadmeResponse`: Defines the response structure for both generating and retrieving README files. Contains a `token` field to identify the generated content.
+* Docker
+* Google Cloud Project with Artifact Registry and Cloud Run enabled
+* API Key for the CodeCaster service
 
-**Overall:**
+**Steps:**
 
-This code represents a well-structured backend for a service that leverages a large language model (Gemini Pro) to generate README files from code. It employs best practices for containerization, configuration, dependency management, and API design.
+1. Clone the CodeCaster repository.
+2. Navigate to the `backend` directory.
+3. Build the Docker image using the provided `Dockerfile`:
+   ```bash
+   docker build -t [your-image-name] .
+   ```
+4. Push the Docker image to Google Artifact Registry:
+   ```bash
+   docker push asia-northeast1-docker.pkg.dev/[your-project-id]/[your-repository]/[your-image-name]:[your-tag]
+   ```
+
+## Run Instructions
+
+**Starting the Service:**
+
+1. Deploy the Docker image to Google Cloud Run:
+    ```bash
+    gcloud run deploy code-caster-backend --image asia-northeast1-docker.pkg.dev/[your-project-id]/[your-repository]/[your-image-name]:[your-tag] --region asia-northeast1
+    ```
+
+**Using the API:**
+
+1. **Generate README:**
+    * Send a `POST` request to the `/gen/readme/` endpoint with the zip file of your code as the request body. Include your API key in the `Authorization` header.
+    * The response will contain a `token` that identifies the generated README content.
+2. **Retrieve README:**
+    * Send a `GET` request to the `/gen/readme/{token}` endpoint, replacing `{token}` with the token received from the previous step. Include your API key in the `Authorization` header. 
+    * The response will be the generated README file.
