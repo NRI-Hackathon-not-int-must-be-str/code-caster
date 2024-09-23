@@ -70,7 +70,7 @@ async def get_generated_readme(
     output_file = output_path / "output.md"
     if not output_file.is_file():
         raise HTTPException(
-            status_code=status.HTTP_102_PROCESSING, detail="please wait to generate"
+            status_code=status.HTTP_204_NO_CONTENT, detail="please wait to generate"
         )
 
     return FileResponse(
