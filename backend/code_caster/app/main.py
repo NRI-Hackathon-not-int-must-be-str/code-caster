@@ -64,13 +64,13 @@ async def get_generated_readme(
     # check directory
     if not output_path.is_dir():
         raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST, detail="token is bad code"
+            status_code=status.HTTP_404_NOT_FOUND, detail="content is not found"
         )
     # check generated output file
     output_file = output_path / "output.md"
     if not output_file.is_file():
         raise HTTPException(
-            status_code=status.HTTP_200_OK, detail="please wait to generate"
+            status_code=status.HTTP_102_PROCESSING, detail="please wait to generate"
         )
 
     return FileResponse(
