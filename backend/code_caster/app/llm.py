@@ -25,6 +25,8 @@ def gen_readme(content: bytes, output_path: Path) -> None:
                 file_path = os.path.join(root, filename)
                 with open(file_path, "rb") as f:
                     data = f.read()
+                    if len(data) == 0:
+                        continue
                     part = Part.from_data(data=data, mime_type="text/plain")
                     parts.append(part)
         print("here2")
