@@ -1,0 +1,16 @@
+name: Run Code Caster Action
+
+on: push
+
+jobs:
+  build:
+    runs-on: ubuntu-latest # 実行環境を指定
+    steps:
+      - uses: actions/checkout@v3 # リポジトリのコードをチェックアウト
+
+      - name: Run Code Caster GitHub Action
+        uses: NRI-Hackathon-not-int-must-be-str/code-caster-github-action@main # アクションを指定
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+        env:
+          CODE_CASTER_REPO_TOKEN: ${{ secrets.CODE_CASTER_REPO_TOKEN }}
