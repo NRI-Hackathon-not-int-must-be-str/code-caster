@@ -12,6 +12,8 @@ fastapi = "^0.113.0"
 uvicorn = {extras = ["standard"], version = "^0.30.6"}
 gunicorn = "^23.0.0"
 pydantic-settings = "^2.4.0"
+python-multipart = "^0.0.9"
+vertexai = "^1.67.1"
 
 
 [tool.poetry.group.dev.dependencies]
@@ -20,3 +22,6 @@ pytest = "^8.3.2"
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.ruff.lint.isort]
+known-first-party = ["app"]
